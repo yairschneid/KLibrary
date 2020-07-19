@@ -1,0 +1,129 @@
+﻿<mah:MetroWindow   xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" 
+                x:Class="KofmanLibrary.MainWindow"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:local="clr-namespace:KofmanLibrary.ViewModels"
+                xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                   mc:Ignorable="d"
+                Title="Kofman Library" Height="450" Width="800">
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+            
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
+
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <ToggleButton Content="{}" 
+                    IsChecked="{Binding ElementName=MyFlyout, Path=IsOpen}" Cursor="Hand">
+                <ToggleButton.Style>
+                    <Style TargetType="{x:Type ToggleButton}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Image Name="Image" Source="{iconPacks:BoxIconsImage Kind=RegularMenu, Brush=White}" Margin="10"/>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter TargetName="Image" Property="Source" Value="{iconPacks:BoxIconsImage Kind=RegularMenuAltLeft}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+
+    
+    
+    <mah:MetroWindow.Resources>
+        <local:MainViewModel x:Key="MainViewModel" />
+        <Style TargetType="{x:Type Button}" x:Key="menuButton">
+            <Style.Setters>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid x:Name="grid">
+                                <Border x:Name="border" CornerRadius="1.5" BorderBrush="White" BorderThickness="0.5">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.FontWeight="Regular">
+                                    </ContentPresenter>
+                                </Border>
+
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="LemonChiffon"/>
+                                    <Setter Property="Background" Value="Black"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" TargetName="grid" Value="0.25"/>
+                                </Trigger>
+
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style.Setters>
+        </Style>
+    </mah:MetroWindow.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.3*"/>
+        </Grid.ColumnDefinitions>
+
+        <mah:FlyoutsControl Grid.Column="1">
+            <mah:Flyout x:Name="MyFlyout" Header="תפריט" Theme="Accent" Position="Right" Width="auto"
+                         IsOpen="{Binding FlyoutOverView, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel>
+                    <mah:Tile Title="הכנס ספר חדש"
+                           Margin="3"
+                           mah:ControlsHelper.MouseOverBorderBrush="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                           Background="Gray"
+                           HorizontalTitleAlignment="Right" Height="auto">
+                                <iconPacks:PackIconModern Width="auto"
+                                          Height="{Binding Width}"
+                                          Kind="Book" />   
+                    </mah:Tile>
+                </StackPanel>
+            </mah:Flyout>
+        </mah:FlyoutsControl>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2 *"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <mah:Badged Badge="{Binding NumOfBorrows}">
+                    <!-- Control to wrap goes here -->
+                    <Button Content="השאלות" Command="{Binding BookListBorrowFilter}" Width="auto" MinWidth="80" Margin="5"/>
+                </mah:Badged>
+                <mah:Badged Badge="{Binding NumOfBorrows}">
+                    <!-- Control to wrap goes here -->
+                    <Button Content="על המדף" Command="{Binding BookListBorrowFilter}" Width="auto" MinWidth="80" Margin="5"/>
+                </mah:Badged>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <ListBox ItemsSource="{Binding BooksViewList}">
+                </ListBox>
+            </StackPanel>
+            
+        </Grid>
+        
+    </Grid>
+</mah:MetroWindow>
